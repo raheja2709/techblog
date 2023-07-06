@@ -1,14 +1,15 @@
 package com.tech.blog.servlets;
 
+import java.awt.Image;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
 
 /**
  * Servlet implementation class ImageServlet
@@ -25,10 +26,11 @@ public class ImageServlet extends HttpServlet {
 		response.setContentType("text/html");
 		try (PrintWriter out = response.getWriter()) {
 
-			// String path = "D:/TechBlog/images/" + imageName;
 			StringBuffer imageName = request.getRequestURL();
 			System.out.println(imageName.substring(38));
-			System.out.println("imagename = " + imageName);
+			String images = imageName.substring(38);
+			File sourceimage = new File("d:\\techblog\\images\\" + images);
+			Image image = ImageIO.read(sourceimage);
 			out.println(imageName);
 		} catch (Exception e) {
 			e.printStackTrace();
