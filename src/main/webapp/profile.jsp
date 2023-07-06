@@ -97,7 +97,7 @@ if (user == null) {
 				</div>
 				<div class="modal-body text-center">
 					<div class="container text-center">
-						<img src="pics/<%=user.getProfile()%>" class="img-fluid"
+						<img src="images/<%=user.getProfile()%>" class="img-fluid"
 							style="margin-right: 10px; margin-left: 10px; margin-top: 20px; width: 200px; height: 200px; border-radius: 50%;">
 						<br>
 						<h5 class="modal-title mt-3" id="exampleModalLabel"><%=user.getName()%></h5>

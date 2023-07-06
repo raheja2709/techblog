@@ -85,6 +85,7 @@ public class UserDAO {
 			p.setString(6, user.getProfile());
 			p.setInt(7, user.getId());
 			p.executeUpdate();
+			f = true;
 
 		} catch (Exception e) {
 			e.printStackTrace();

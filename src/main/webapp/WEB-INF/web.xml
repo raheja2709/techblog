@@ -23,6 +23,10 @@
 		<servlet-name>edit</servlet-name>
 		<servlet-class>com.tech.blog.servlets.EditServlet</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>image</servlet-name>
+		<servlet-class>com.tech.blog.servlets.ImageServlet</servlet-class>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>Register</servlet-name>
 		<url-pattern>/RegisterServlet</url-pattern>
@@ -38,5 +42,9 @@
 	<servlet-mapping>
 		<servlet-name>edit</servlet-name>
 		<url-pattern>/EditServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>image</servlet-name>
+		<url-pattern>/images/*</url-pattern>
 	</servlet-mapping>
 </web-app>

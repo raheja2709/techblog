@@ -1,8 +1,10 @@
 package com.tech.blog.servlets;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
@@ -56,13 +58,26 @@ public class EditServlet extends HttpServlet {
 
 			UserDAO userdao = new UserDAO(ConnectionProvider.getConnection());
 			boolean ans = userdao.updateUser(user);
+			System.out.println("ans  = " + ans);
+
 			if (ans) {
 				out.println("updated to db");
+
+				String path = "D:/TechBlog/images";
+				File directory = new File(path);
+				if (!directory.exists()) {
+					directory.mkdirs();
+				}
+				String uniqueFileName = imageName;
+				String filePath = path + File.separator + uniqueFileName;
+				part.write(filePath);
+
 			} else {
 				out.println("not updated.....");
 			}
 			out.println("</body>");
 			out.println("</html>");
+
 		}
 	}
 
