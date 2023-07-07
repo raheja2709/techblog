@@ -15,6 +15,7 @@ import javax.servlet.http.Part;
 import com.tech.blog.DAO.UserDAO;
 import com.tech.blog.entities.Usermaster;
 import com.tech.blog.helper.ConnectionProvider;
+import com.tech.blog.helper.Helper;
 
 /**
  * Servlet implementation class EditServlet
@@ -45,31 +46,41 @@ public class EditServlet extends HttpServlet {
 			String userAbout = request.getParameter("user_about");
 			Part part = request.getPart("image");
 			String imageName = part.getSubmittedFileName();
-
 			// get the user from the session
+
 			HttpSession s = request.getSession();
 			Usermaster user = (Usermaster) s.getAttribute("currentUser");
+			String profilename = user.getProfile();
+
 			user.setEmail(userEmail);
 			user.setName(userName);
 			user.setPassword(userPassword);
 			user.setAbout(userAbout);
-			user.setProfile(imageName);
+			String path = null;
+			if (part.getSize() != 0 && imageName != null) {
+				user.setProfile(imageName);
+				path = "D:/TechBlog/images/" + user.getProfile();
+			}
 
 			UserDAO userdao = new UserDAO(ConnectionProvider.getConnection());
 			boolean ans = userdao.updateUser(user);
-			System.out.println("ans  = " + ans);
 
+			System.out.println("image path :- " + path);
+			System.out.println("Answer = " + ans);
 			if (ans) {
 				out.println("updated to db");
-
-				String path = "D:/TechBlog/images";
-				File directory = new File(path);
-				if (!directory.exists()) {
-					directory.mkdirs();
+				// Helper.saveFile(part.getInputStream(), path);
+				if (path != null) {
+					File directory = new File(path);
+					if (!directory.exists()) {
+						String oldPath = directory.getAbsoluteFile().toString().substring(0, 19) + profilename;
+						System.out.println("old Path :- " + oldPath);
+						Helper.deleteFile(oldPath);
+						directory.mkdirs();
+					}
+					String filePath = path;
+					part.write(filePath);
 				}
-				String uniqueFileName = imageName;
-				String filePath = path + File.separator + uniqueFileName;
-				part.write(filePath);
 
 			} else {
 				out.println("not updated.....");

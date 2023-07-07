@@ -103,6 +103,7 @@ if (user == null) {
 						<h5 class="modal-title mt-3" id="exampleModalLabel"><%=user.getName()%></h5>
 						<!-- 						Details -->
 						<div id="profile-details">
+
 							<table class="table">
 								<tbody>
 									<tr>
