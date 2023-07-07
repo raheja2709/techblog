@@ -78,6 +78,18 @@ if (user == null) {
 	</nav>
 	<!-- 	End of navbar -->
 
+	<%
+	Message m = (Message) session.getAttribute("msg");
+	if (m != null) {
+	%>
+	<div class="alert <%=m.getCssClass()%>" role="alert">
+		<%=m.getContent()%>
+	</div>
+
+	<%
+	session.removeAttribute("msg");
+	}
+	%>
 
 
 	<!-- 	Profile modal -->

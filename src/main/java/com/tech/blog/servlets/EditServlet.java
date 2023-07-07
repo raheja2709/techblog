@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import com.tech.blog.DAO.UserDAO;
+import com.tech.blog.entities.Message;
 import com.tech.blog.entities.Usermaster;
 import com.tech.blog.helper.ConnectionProvider;
 import com.tech.blog.helper.Helper;
@@ -65,8 +66,8 @@ public class EditServlet extends HttpServlet {
 			UserDAO userdao = new UserDAO(ConnectionProvider.getConnection());
 			boolean ans = userdao.updateUser(user);
 
-			System.out.println("image path :- " + path);
-			System.out.println("Answer = " + ans);
+//			System.out.println("image path :- " + path);
+//			System.out.println("Answer = " + ans);
 			if (ans) {
 				out.println("updated to db");
 				// Helper.saveFile(part.getInputStream(), path);
@@ -74,17 +75,23 @@ public class EditServlet extends HttpServlet {
 					File directory = new File(path);
 					if (!directory.exists()) {
 						String oldPath = directory.getAbsoluteFile().toString().substring(0, 19) + profilename;
-						System.out.println("old Path :- " + oldPath);
+//						System.out.println("old Path :- " + oldPath);
 						Helper.deleteFile(oldPath);
 						directory.mkdirs();
 					}
 					String filePath = path;
 					part.write(filePath);
+					Message msg = new Message("Profile details Updated......", "success", "alert-success");
+					s.setAttribute("msg", msg);
 				}
 
 			} else {
-				out.println("not updated.....");
+				// out.println("not updated.....");
+				Message msg = new Message("Something went Wrong", "error", "alert-danger");
+				s.setAttribute("msg", msg);
+
 			}
+			response.sendRedirect("profile.jsp");
 			out.println("</body>");
 			out.println("</html>");
 
