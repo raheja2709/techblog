@@ -27,6 +27,10 @@
 		<servlet-name>image</servlet-name>
 		<servlet-class>com.tech.blog.servlets.ImageServlet</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>PostServlet</servlet-name>
+		<servlet-class>com.tech.blog.servlets.AddPostServlet</servlet-class>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>Register</servlet-name>
 		<url-pattern>/RegisterServlet</url-pattern>
@@ -46,5 +50,9 @@
 	<servlet-mapping>
 		<servlet-name>image</servlet-name>
 		<url-pattern>/images/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>PostServlet</servlet-name>
+		<url-pattern>/AddPostServlet</url-pattern>
 	</servlet-mapping>
 </web-app>

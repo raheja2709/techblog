@@ -58,6 +58,7 @@ public class EditServlet extends HttpServlet {
 			user.setPassword(userPassword);
 			user.setAbout(userAbout);
 			String path = null;
+			
 			if (part.getSize() != 0 && imageName != null) {
 				user.setProfile(imageName);
 				path = "D:/TechBlog/images/" + user.getProfile();
@@ -65,9 +66,6 @@ public class EditServlet extends HttpServlet {
 
 			UserDAO userdao = new UserDAO(ConnectionProvider.getConnection());
 			boolean ans = userdao.updateUser(user);
-
-//			System.out.println("image path :- " + path);
-//			System.out.println("Answer = " + ans);
 			if (ans) {
 				out.println("updated to db");
 				// Helper.saveFile(part.getInputStream(), path);
@@ -75,7 +73,7 @@ public class EditServlet extends HttpServlet {
 					File directory = new File(path);
 					if (!directory.exists()) {
 						String oldPath = directory.getAbsoluteFile().toString().substring(0, 19) + profilename;
-//						System.out.println("old Path :- " + oldPath);
+
 						Helper.deleteFile(oldPath);
 						directory.mkdirs();
 					}
@@ -86,7 +84,6 @@ public class EditServlet extends HttpServlet {
 				}
 
 			} else {
-				// out.println("not updated.....");
 				Message msg = new Message("Something went Wrong", "error", "alert-danger");
 				s.setAttribute("msg", msg);
 

@@ -27,6 +27,8 @@
 				</div></li>
 			<li class="nav-item"><a class="nav-link" href="#"><span
 					class="fa fa-address-book-o"></span> Contact</a></li>
+			<li class="nav-item"><a class="nav-link" href="#"><span
+					class="fa fa-address-book-o"></span> Do Post</a></li>
 			<li class="nav-item"><a class="nav-link" href="login.jsp"><span
 					class="fa fa-user-circle-o fa-spin"></span> Login</a></li>
 			<li class="nav-item"><a class="nav-link"

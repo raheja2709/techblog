@@ -1,3 +1,7 @@
+<%@page import="com.tech.blog.entities.Category"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.tech.blog.helper.ConnectionProvider"%>
+<%@page import="com.tech.blog.DAO.PostDAO"%>
 <%@page import="com.tech.blog.entities.Message"%>
 <%@page import="com.tech.blog.entities.Usermaster"%>
 <%@page errorPage="error_page.jsp"%>
@@ -61,8 +65,12 @@ if (user == null) {
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" href="#">Data Structure</a>
 					</div></li>
+
 				<li class="nav-item"><a class="nav-link" href="#"><span
 						class="fa fa-address-book-o"></span> Contact</a></li>
+				<li class="nav-item"><a class="nav-link" href="#"
+					data-toggle="modal" data-target="#add-post-modal"><span
+						class="fa fa-asterisk"></span> Do Post</a></li>
 
 
 			</ul>
@@ -210,6 +218,66 @@ if (user == null) {
 	<!-- 	end of profile model -->
 
 
+	<!-- Add post Modal -->
+
+	<!-- Modal -->
+	<div class="modal fade" id="add-post-modal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Provide Post
+						Details</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form id="add-post-form" action="addPostServlet" method="post">
+						<div class="form-group">
+							<select class="form-control" name="cid">
+								<option selected disabled>---Select Category--</option>
+								<%
+								PostDAO postd = new PostDAO(ConnectionProvider.getConnection());
+								ArrayList<Category> list = postd.getAllCategories();
+								for (Category c : list) {
+								%>
+								<option value="<%=c.getcId()%>"><%=c.getName()%></option>
+								<%
+								}
+								%>
+							</select>
+						</div>
+						<div class="form-group">
+							<input name="title" type="text" placeholder="Enter Post Title"
+								class="form-control">
+						</div>
+						<div class="form-group">
+							<textarea name="pContent" class="form-control"
+								Style="height: 200px;" placeholder="Enter your content"></textarea>
+						</div>
+						<div class="form-group">
+							<textarea name="pCode" class="form-control"
+								Style="height: 200px;" placeholder="Enter your Program(if any)"></textarea>
+						</div>
+						<label>Select File : </label> <br>
+						<div class="form-group">
+							<input name="pic" type="file" class="form-control">
+						</div>
+
+						<div class="container text-center">
+							<button type="submit" class="btn btn-outline-primary">Post
+							</button>
+						</div>
+					</form>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	<!-- 	End of Post Modal -->
+
 
 	<script src="https://code.jquery.com/jquery-3.7.0.min.js"
 		integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
@@ -242,6 +310,32 @@ if (user == null) {
 				}
 			})
 		});
+	</script>
+	<!-- 	now add post js -->
+
+	<script>
+		$(document).ready(function(e) {
+			$('#add-post-form').on("submit", function(event) {
+				event.preventDefault();
+				console.log("you have clicked on submit..")
+				let form = new FormData(this);
+				//now requesting to server
+				$.ajax({
+					url : "AddPostServlet",
+					type : 'POST',
+					data : form,
+					success : function(data, textStatus, jqXHR) {
+						//success
+						console.log(data)
+					},
+					error : function(jqXHR, textStatus, errorThrown) {
+
+					},
+					processData : false,
+					contentType : false
+				})
+			})
+		})
 	</script>
 
 </body>
