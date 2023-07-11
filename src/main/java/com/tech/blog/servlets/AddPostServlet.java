@@ -16,7 +16,6 @@ import com.tech.blog.DAO.PostDAO;
 import com.tech.blog.entities.Post;
 import com.tech.blog.entities.Usermaster;
 import com.tech.blog.helper.ConnectionProvider;
-import com.tech.blog.helper.Helper;
 
 /**
  * Servlet implementation class AddPostServlet
@@ -39,15 +38,14 @@ public class AddPostServlet extends HttpServlet {
 			HttpSession session = request.getSession();
 
 			Usermaster user = (Usermaster) session.getAttribute("currentUser");
-
-			out.println("Pic Name = " + part.getSubmittedFileName());
-
 			Post p = new Post(title, pContent, pCode, part.getSubmittedFileName(), null, cid, user.getId());
 			PostDAO dao = new PostDAO(ConnectionProvider.getConnection());
 			String path = null;
 			if (dao.savePost(p)) {
 				out.println("done");
-				path = "D:/TechBlog/blog_pics/" + part.getSubmittedFileName();
+//				path = "D:/TechBlog/TechBlog/blog_pics/" + part.getSubmittedFileName();
+				path = request.getRealPath("/") + "blog_pics" + File.separator + part.getSubmittedFileName();
+
 				File directory = new File(path);
 				if (!directory.exists()) {
 					directory.mkdirs();

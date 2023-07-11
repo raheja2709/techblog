@@ -2,6 +2,7 @@ package com.tech.blog.DAO;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.tech.blog.entities.Category;
 import com.tech.blog.entities.Post;
@@ -46,6 +47,7 @@ public class PostDAO {
 			pstmt.setString(4, p.getpPic());
 			pstmt.setInt(5, p.getCatId());
 			pstmt.setInt(6, p.getUserId());
+
 			pstmt.executeUpdate();
 			f = true;
 		} catch (Exception e) {
@@ -54,4 +56,53 @@ public class PostDAO {
 		return f;
 	}
 
+	// get all posts
+	public List<Post> getAllPosts() {
+		List<Post> list = new ArrayList<>();
+		// fetch all the posts
+		try {
+			PreparedStatement p = con.prepareStatement("select * from posts order by pid desc");
+			ResultSet set = p.executeQuery();
+			while (set.next()) {
+				int pid = set.getInt("pid");
+				String ptitle = set.getString("title");
+				String pcontent = set.getString("pcontent");
+				String pcode = set.getString("pcode");
+				String ppic = set.getString("ppic");
+				Timestamp date = set.getTimestamp("pdate");
+				int catId = set.getInt("catid");
+				int userId = set.getInt("userid");
+				Post post = new Post(pid, ptitle, pcontent, pcode, ppic, date, catId, userId);
+				list.add(post);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	public List<Post> getPostbyCatId(int catid) {
+		List<Post> list = new ArrayList<>();
+		// fetch all the posts by Id
+		try {
+			PreparedStatement p = con.prepareStatement("select * from posts where catid = ?");
+			p.setInt(1, catid);
+			ResultSet set = p.executeQuery();
+			while (set.next()) {
+				int pid = set.getInt("pid");
+				String ptitle = set.getString("title");
+				String pcontent = set.getString("pcontent");
+				String pcode = set.getString("pcode");
+				String ppic = set.getString("ppic");
+				Timestamp date = set.getTimestamp("pdate");
+				int catId = set.getInt("catid");
+				int userId = set.getInt("userid");
+				Post post = new Post(pid, ptitle, pcontent, pcode, ppic, date, catId, userId);
+				list.add(post);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 }

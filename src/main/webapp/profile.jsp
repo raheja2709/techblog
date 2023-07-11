@@ -217,7 +217,47 @@ if (user == null) {
 
 	<!-- 	end of profile model -->
 
+	<!-- main body of the page -->
 
+	<main>
+		<div class="container">
+			<div class="row mt-4">
+				<!-- first column -->
+				<div class="col-md-4">
+					<!--Categories -->
+
+					<div class="list-group">
+						<a href="#" onclick="getPosts(0,this)"
+							class="c-link list-group-item list-group-item-action active">
+							All Posts </a>
+						<%
+						PostDAO d = new PostDAO(ConnectionProvider.getConnection());
+						ArrayList<Category> list1 = d.getAllCategories();
+						for (Category cc : list1) {
+						%>
+						<a href="#" onclick="getPosts(<%=cc.getcId()%>,this)"
+							class="c-link list-group-item list-group-item-action"> <%=cc.getName()%></a>
+
+						<%
+						}
+						%>
+
+					</div>
+				</div>
+				<!-- Second column -->
+				<div class="col-md-8">
+					<!--posts -->
+					<div class="container text-center" id="loader">
+						<i class="fa fa-refresh fa-4x fa-spin"></i>
+						<h3 class="mt-4">loading...</h3>
+					</div>
+					<div class="container-fluid" id="post-container"></div>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<!-- 	End of the main body -->
 	<!-- Add post Modal -->
 
 	<!-- Modal -->
@@ -291,6 +331,8 @@ if (user == null) {
 		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 		crossorigin="anonymous"></script>
 
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 	<script src="js/myfile.js" type="text/javascript"></script>
 
 	<script>
@@ -314,29 +356,84 @@ if (user == null) {
 	<!-- 	now add post js -->
 
 	<script>
-		$(document).ready(function(e) {
-			$('#add-post-form').on("submit", function(event) {
-				event.preventDefault();
-				console.log("you have clicked on submit..")
-				let form = new FormData(this);
-				//now requesting to server
-				$.ajax({
-					url : "AddPostServlet",
-					type : 'POST',
-					data : form,
-					success : function(data, textStatus, jqXHR) {
-						//success
-						console.log(data)
-					},
-					error : function(jqXHR, textStatus, errorThrown) {
+		$(document)
+				.ready(
+						function(e) {
+							$('#add-post-form')
+									.on(
+											"submit",
+											function(event) {
+												event.preventDefault();
+												let form = new FormData(this);
+												//now requesting to server
+												$
+														.ajax({
+															url : "AddPostServlet",
+															type : 'POST',
+															data : form,
+															success : function(
+																	data,
+																	textStatus,
+																	jqXHR) {
+																//success
+																swal(
+																		"Good job!",
+																		"saved successfully!",
+																		"success");
 
-					},
-					processData : false,
-					contentType : false
-				})
+																console
+																		.log(data)
+																if (data.trim() == 'done') {
+																	swal(
+																			"Good job!",
+																			"saved successfully!",
+																			"success");
+																} else {
+																	swal(
+																			"Error!!",
+																			"something went wrong try again....",
+																			"error");
+																}
+															},
+															error : function(
+																	jqXHR,
+																	textStatus,
+																	errorThrown) {
+																swal(
+																		"Error!!",
+																		"something went wrong try again....",
+																		"error");
+															},
+															processData : false,
+															contentType : false
+														})
+											})
+						})
+	</script>
+	<script>
+		function getPosts(catId,temp) {
+			$("#loader").show()
+			$("#post-container").hide()
+			$(".c-link").removeClass('active')
+			$.ajax({
+				url : "load_post.jsp",
+				data : {
+					cid : catId
+				},
+				success : function(data, textStatus, jqXHR) {
+					console.log(data);
+					$("#loader").hide();
+					$("#post-container").show();
+					$('#post-container').html(data)
+					$(temp).addClass('active')
+				}
 			})
+
+		}
+		$(document).ready(function(e) {
+			let allPostRef=$('.c-link')[0]
+			getPosts(0,allPostRef)
 		})
 	</script>
-
 </body>
 </html>
