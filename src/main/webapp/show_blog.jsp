@@ -1,9 +1,13 @@
+<%@page import="java.text.DateFormat"%>
+<%@page import="com.tech.blog.DAO.UserDAO"%>
 <%@page import="com.tech.blog.entities.Category"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.tech.blog.helper.ConnectionProvider"%>
 <%@page import="com.tech.blog.DAO.PostDAO"%>
-<%@page import="com.tech.blog.entities.Message"%>
+<%@page import="com.tech.blog.entities.Post"%>
 <%@page import="com.tech.blog.entities.Usermaster"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
 <%@page errorPage="error_page.jsp"%>
 
 <%
@@ -13,13 +17,16 @@ if (user == null) {
 }
 %>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+int postId = Integer.parseInt(request.getParameter("post_id"));
+PostDAO d = new PostDAO(ConnectionProvider.getConnection());
+Post p = d.getPostByPostId(postId);
+%>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Profile</title>
-
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
 	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
@@ -35,12 +42,40 @@ if (user == null) {
 		);;
 }
 
+.post-title {
+	font-weight: 100;
+	font-size: 30px;
+}
+
+.post-content {
+	font-weight: 100;
+	font-size: 20px;
+}
+
+.post-date {
+	font-style: italic;
+	font-weight: bold;
+}
+
+.post-user-info {
+	font-size: 20px;
+	font-weight: 200;
+}
+
+.row-user {
+	/* 	border: 1px solid #e2e2e2; */
+	/* 	padding-top: 10px; */
+	/* 	pading-right : 35px; */
+	
+}
+
 body {
 	background: url(img/techbg.jpg);
 	background-size: cover;
 	background-attachment: fixed;
 }
 </style>
+<title><%=p.getpTitle()%> || TechBlog by Jatin Raheja</title>
 </head>
 <body>
 	<!-- Navbar -->
@@ -56,9 +91,9 @@ body {
 
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item active"><a class="nav-link" href="#"><span
-						class="fa fa-bell-o"></span> CodeWith Jatin <span class="sr-only">(current)</span>
-				</a></li>
+				<li class="nav-item active"><a class="nav-link"
+					href="profile.jsp"><span class="fa fa-bell-o"></span> CodeWith
+						Jatin <span class="sr-only">(current)</span> </a></li>
 
 				<li class="nav-item dropdown"><a
 					class="nav-link dropdown-toggle" href="#" id="navbarDropdown"
@@ -92,20 +127,54 @@ body {
 	</nav>
 	<!-- 	End of navbar -->
 
-	<%
-	Message m = (Message) session.getAttribute("msg");
-	if (m != null) {
-	%>
-	<div class="alert <%=m.getCssClass()%>" role="alert">
-		<%=m.getContent()%>
+	<!-- 	main content of body -->
+
+	<div class="container">
+		<div class="row my-4">
+			<div class="col-md-8 offset-md-2">
+				<div class="card">
+					<div class="card-header primary-background text-white">
+						<h4 class="post-title"><%=p.getpTitle()%></h4>
+					</div>
+					<img class="card-img-top my-2 " src="blog_pics/<%=p.getpPic()%>"
+						alt="Card image cap" style="height: 200px; width: 300px;">
+					<div class="row my-3 row-user">
+						<div class="col-md-8">
+							<p class="post-user-info">
+								<%
+								UserDAO ud = new UserDAO(ConnectionProvider.getConnection());
+								%>
+								&nbsp;&nbsp;&nbsp;<a href="#"><%=ud.getUserByUserId(p.getUserId()).getName()%></a>
+								has posted
+							</p>
+						</div>
+						<div class="col-md-4">
+							<p class="post-date"><%=DateFormat.getDateTimeInstance().format(p.getpDate())%></p>
+						</div>
+					</div>
+					<div class="card-body">
+						<p class="post-content"><%=p.getpContent()%></p>
+						<br> <br>
+						<div class="post-code">
+							<pre><%=p.getpCode()%></pre>
+						</div>
+
+					</div>
+
+					<div class="card-footer primary-background">
+						<a href="#!" onclick="doLike(<%=p.getpId()%>,<%=p.getUserId()%>)"class="btn btn-outline-light btn-sm"><i class="fa fa-thumbs-o-up"></i><span> 10</span></a>
+						 <a href="#!"class="btn btn-outline-light btn-sm"><i class="fa fa-commenting-o"></i><span> 20</span></a>
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+
 	</div>
 
-	<%
-	session.removeAttribute("msg");
-	}
-	%>
-
-
+	<!-- end of main content  -->
 	<!-- 	Profile modal -->
 
 
@@ -223,47 +292,6 @@ body {
 
 	<!-- 	end of profile model -->
 
-	<!-- main body of the page -->
-
-	<main>
-		<div class="container">
-			<div class="row mt-4">
-				<!-- first column -->
-				<div class="col-md-4">
-					<!--Categories -->
-
-					<div class="list-group">
-						<a href="#" onclick="getPosts(0,this)"
-							class="c-link list-group-item list-group-item-action active">
-							All Posts </a>
-						<%
-						PostDAO d = new PostDAO(ConnectionProvider.getConnection());
-						ArrayList<Category> list1 = d.getAllCategories();
-						for (Category cc : list1) {
-						%>
-						<a href="#" onclick="getPosts(<%=cc.getcId()%>,this)"
-							class="c-link list-group-item list-group-item-action"> <%=cc.getName()%></a>
-
-						<%
-						}
-						%>
-
-					</div>
-				</div>
-				<!-- Second column -->
-				<div class="col-md-8">
-					<!--posts -->
-					<div class="container text-center" id="loader">
-						<i class="fa fa-refresh fa-4x fa-spin"></i>
-						<h3 class="mt-4">loading...</h3>
-					</div>
-					<div class="container-fluid" id="post-container"></div>
-				</div>
-			</div>
-		</div>
-	</main>
-
-	<!-- 	End of the main body -->
 	<!-- Add post Modal -->
 
 	<!-- Modal -->
@@ -415,31 +443,6 @@ body {
 														})
 											})
 						})
-	</script>
-	<script>
-		function getPosts(catId,temp) {
-			$("#loader").show()
-			$("#post-container").hide()
-			$(".c-link").removeClass('active')
-			$.ajax({
-				url : "load_post.jsp",
-				data : {
-					cid : catId
-				},
-				success : function(data, textStatus, jqXHR) {
-					console.log(data);
-					$("#loader").hide();
-					$("#post-container").show();
-					$('#post-container').html(data)
-					$(temp).addClass('active')
-				}
-			})
-
-		}
-		$(document).ready(function(e) {
-			let allPostRef=$('.c-link')[0]
-			getPosts(0,allPostRef)
-		})
 	</script>
 </body>
 </html>

@@ -16,7 +16,8 @@
 		posts = d.getPostbyCatId(cid);
 	}
 	if (posts.size() == 0) {
-		out.println("<h3 class='display-3 text-center'>No Posts in this category..</h3>");
+		out.println(
+		"<h3 class='display-3 text-center primary-background text-white'>No Posts in this category..</h3>");
 		return;
 	}
 	for (Post p : posts) {
@@ -31,10 +32,17 @@
 				<div class="card-body">
 					<b><%=p.getpTitle()%></b>
 					<p><%=p.getpContent()%></p>
-					<pre><%=p.getpCode()%></pre>
+					<%-- 					<pre><%=p.getpCode()%></pre> --%>
 				</div>
-				<div class="card-footer">
-					<a href="#!" class="btn btn-outline"></a>
+				<div class="card-footer bg-primary text-center">
+					<a href="#!" class="btn btn-outline-light btn-sm"> <i
+						class="fa fa-thumbs-o-up"></i><span> 10</span></a> <a
+						href="show_blog.jsp?post_id=<%=p.getpId()%>"
+						class="btn btn-outline-light btn-sm">Read More</a> <a href="#!"
+						class="btn btn-outline-light btn-sm"> <i
+						class="fa fa-commenting-o"></i><span> 20</span></a>
+
+
 				</div>
 			</div>
 

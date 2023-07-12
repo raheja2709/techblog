@@ -1,3 +1,3 @@
-//$(document).ready(function() {
-//	alert("document loaded Helo Jatin Raheja");
-//})
+function doLike(pid,uid){
+	console.log(pid + "," + uid)
+}

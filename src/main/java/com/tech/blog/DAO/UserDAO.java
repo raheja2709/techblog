@@ -92,4 +92,29 @@ public class UserDAO {
 		}
 		return f;
 	}
+
+	public Usermaster getUserByUserId(int userid) {
+		Usermaster user = null;
+		try {
+			String q = "select * from usermaster where id=?";
+			PreparedStatement ps = this.con.prepareStatement(q);
+			ps.setInt(1, userid);
+			ResultSet set = ps.executeQuery();
+			if (set.next()) {
+				user = new Usermaster();
+				user.setId(set.getInt("id"));
+
+				user.setName(set.getString("name"));
+				user.setEmail(set.getString("email"));
+				user.setPassword(set.getString("password"));
+				user.setGender(set.getString("gender"));
+				user.setAbout(set.getString("about"));
+				user.setRdate(set.getTimestamp("rdate"));
+				user.setProfile(set.getString("profile"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return user;
+	}
 }

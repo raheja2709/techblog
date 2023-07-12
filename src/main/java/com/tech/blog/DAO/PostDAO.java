@@ -1,6 +1,11 @@
 package com.tech.blog.DAO;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,5 +109,31 @@ public class PostDAO {
 			e.printStackTrace();
 		}
 		return list;
+	}
+
+	public Post getPostByPostId(int postId) throws SQLException {
+		Post post = null;
+		try {
+			String q = "select * from posts where pid = ?";
+			PreparedStatement p = this.con.prepareStatement(q);
+			p.setInt(1, postId);
+			ResultSet set = p.executeQuery();
+			if (set.next()) {
+				int pid = set.getInt("pid");
+				String ptitle = set.getString("title");
+				String pcontent = set.getString("pcontent");
+				String pcode = set.getString("pcode");
+				String ppic = set.getString("ppic");
+				Timestamp date = set.getTimestamp("pdate");
+				int catId = set.getInt("catid");
+				int userId = set.getInt("userid");
+				post = new Post(pid, ptitle, pcontent, pcode, ppic, date, catId, userId);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return post;
+
 	}
 }
