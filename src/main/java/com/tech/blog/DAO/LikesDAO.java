@@ -28,13 +28,13 @@ public class LikesDAO {
 
 	public int countLikeOnPost(int pid) {
 		int count = 0;
-		String q = "select count(*) from likes where pid=?";
+		String q = "select count(*) as count from likes where pid=?";
 		try {
 			PreparedStatement p = this.con.prepareStatement(q);
 			p.setInt(1, pid);
 			ResultSet set = p.executeQuery();
 			if (set.next()) {
-				count = set.getInt("count(*)");
+				count = set.getInt("count");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -62,14 +62,16 @@ public class LikesDAO {
 	public boolean deleteLike(int pid, int uid) {
 		boolean f = false;
 		try {
-			PreparedStatement p = this.con.prepareStatement("delete from likes where pid=? and uid=?,");
+			PreparedStatement p = this.con.prepareStatement("DELETE from likes where pid=? and uid=?");
 			p.setInt(1, pid);
 			p.setInt(2, uid);
-			p.executeUpdate();
+			int ret = p.executeUpdate();
+			System.out.println("deleted count:" + ret);
 			f = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		System.out.println("Deleting like:" + f);
 		return f;
 	}
 }

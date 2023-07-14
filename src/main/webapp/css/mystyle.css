@@ -4,3 +4,9 @@
 .primary-background {
 	background: #2196f3!important;
 }
+
+.btn-clicked:hover {
+    color: #212529;
+    background-color: #f8f9fa;
+    border-color: #f8f9fa;
+}

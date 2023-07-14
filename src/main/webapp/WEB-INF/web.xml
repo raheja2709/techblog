@@ -31,6 +31,14 @@
 		<servlet-name>PostServlet</servlet-name>
 		<servlet-class>com.tech.blog.servlets.AddPostServlet</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>LikeServlet</servlet-name>
+		<servlet-class>com.tech.blog.servlets.LikeServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>DisLikeServlet</servlet-name>
+		<servlet-class>com.tech.blog.servlets.DisLikeServlet</servlet-class>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>Register</servlet-name>
 		<url-pattern>/RegisterServlet</url-pattern>
@@ -54,5 +62,13 @@
 	<servlet-mapping>
 		<servlet-name>PostServlet</servlet-name>
 		<url-pattern>/AddPostServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>LikeServlet</servlet-name>
+		<url-pattern>/LikeServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>DisLikeServlet</servlet-name>
+		<url-pattern>/DisLikeServlet</url-pattern>
 	</servlet-mapping>
 </web-app>

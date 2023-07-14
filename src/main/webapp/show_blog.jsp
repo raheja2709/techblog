@@ -1,3 +1,4 @@
+<%@page import="com.tech.blog.DAO.LikesDAO"%>
 <%@page import="java.text.DateFormat"%>
 <%@page import="com.tech.blog.DAO.UserDAO"%>
 <%@page import="com.tech.blog.entities.Category"%>
@@ -136,6 +137,7 @@ body {
 					<div class="card-header primary-background text-white">
 						<h4 class="post-title"><%=p.getpTitle()%></h4>
 					</div>
+
 					<img class="card-img-top my-2 " src="blog_pics/<%=p.getpPic()%>"
 						alt="Card image cap" style="height: 200px; width: 300px;">
 					<div class="row my-3 row-user">
@@ -162,8 +164,16 @@ body {
 					</div>
 
 					<div class="card-footer primary-background">
-						<a href="#!" onclick="doLike(<%=p.getpId()%>,<%=p.getUserId()%>)"class="btn btn-outline-light btn-sm"><i class="fa fa-thumbs-o-up"></i><span> 10</span></a>
-						 <a href="#!"class="btn btn-outline-light btn-sm"><i class="fa fa-commenting-o"></i><span> 20</span></a>
+
+						<%
+						LikesDAO ld = new LikesDAO(ConnectionProvider.getConnection());
+						%>
+
+						<a href="#!" onclick="doLike(<%=p.getpId()%>,<%=user.getId()%>)"
+							class="btn btn-outline-light btn-sm active"> <i
+							class="fa fa-thumbs-o-up"></i><span class="like-counter">&nbsp;<%=ld.countLikeOnPost(p.getpId())%></span></a>
+						<a href="#!" class="btn btn-outline-light btn-sm"> <i
+							class="fa fa-commenting-o"></i><span> 20</span></a>
 					</div>
 
 				</div>
@@ -390,59 +400,33 @@ body {
 	<!-- 	now add post js -->
 
 	<script>
-		$(document)
-				.ready(
-						function(e) {
-							$('#add-post-form')
-									.on(
-											"submit",
-											function(event) {
-												event.preventDefault();
-												let form = new FormData(this);
-												//now requesting to server
-												$
-														.ajax({
-															url : "AddPostServlet",
-															type : 'POST',
-															data : form,
-															success : function(
-																	data,
-																	textStatus,
-																	jqXHR) {
-																//success
-																swal(
-																		"Good job!",
-																		"saved successfully!",
-																		"success");
-
-																console
-																		.log(data)
-																if (data.trim() == 'done') {
-																	swal(
-																			"Good job!",
-																			"saved successfully!",
-																			"success");
-																} else {
-																	swal(
-																			"Error!!",
-																			"something went wrong try again....",
-																			"error");
-																}
-															},
-															error : function(
-																	jqXHR,
-																	textStatus,
-																	errorThrown) {
-																swal(
-																		"Error!!",
-																		"something went wrong try again....",
-																		"error");
-															},
-															processData : false,
-															contentType : false
-														})
+		$(document).ready(function(e) {
+							$('#add-post-form').on("submit",function(event) {
+								event.preventDefault();
+								let form = new FormData(this);
+								//now requesting to server
+								$.ajax({
+									url : "AddPostServlet",
+									type : 'POST',
+									data : form,
+										success : function(data,textStatus,jqXHR) {
+													//success
+													swal("Good job!","saved successfully!","success");
+													console.log(data)
+													if (data.trim() == 'done') {
+														swal("Good job!","saved successfully!","success");
+													} else {
+														swal("Error!!","something went wrong try again....","error");
+													}
+												},
+										error : function(jqXHR,textStatus,errorThrown) {
+													 swal("Error!!","something went wrong try again....","error");
+												},
+												processData : false,
+												contentType : false
 											})
-						})
-	</script>
+										})
+								})
+		</script>
 </body>
 </html>
