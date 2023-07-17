@@ -24,7 +24,7 @@
 </head>
 <body>
 	<!-- navbar -->
-	]<%@include file="normal_navbar.jsp"%>
+	<%@include file="normal_navbar.jsp"%>
 	<main
 		class="d-flex align-items-center primary-background banner-background"
 		style="height: 70vh">
