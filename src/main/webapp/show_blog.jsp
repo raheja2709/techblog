@@ -173,7 +173,8 @@ body {
 							class="btn btn-outline-light btn-sm active"> <i
 							class="fa fa-thumbs-o-up"></i><span class="like-counter">&nbsp;<%=ld.countLikeOnPost(p.getpId())%></span></a>
 						<a href="#!" class="btn btn-outline-light btn-sm"> <i
-							class="fa fa-commenting-o"></i><span> 20</span></a>
+							class="fa fa-commenting-o"></i><span> 20</span></a> <a
+							href="profile.jsp" class="btn btn-outline-light btn-sm">BACK</a>
 					</div>
 
 				</div>
